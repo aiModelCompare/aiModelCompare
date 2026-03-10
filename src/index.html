@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        .price-up { color: #ef4444; }
-        .price-down { color: #22c55e; }
         .provider-openai { border-left: 4px solid #10a37f; }
         .provider-anthropic { border-left: 4px solid #d97706; }
         .provider-google { border-left: 4px solid #4285f4; }
@@ -27,7 +25,7 @@
         <header class="mb-8">
             <h1 class="text-4xl font-bold text-gray-900 mb-2">🤖 AI 大模型价格对比</h1>
             <p class="text-gray-600">实时对比主流 AI 模型的输入输出价格与 Coding Plan 收费</p>
-            <p class="text-sm text-gray-500 mt-2">最后更新：<span id="lastUpdate">加载中...</span></p>
+            <p class="text-sm text-gray-500 mt-2">最后更新：<span id="lastUpdate">2026-03-10 21:36</span></p>
         </header>
 
         <!-- AI Models Table -->
@@ -55,7 +53,118 @@
                         </tr>
                     </thead>
                     <tbody id="aiModelsBody" class="bg-white divide-y divide-gray-200">
-                        <!-- Data will be inserted here -->
+                        <tr class="hover:bg-gray-50 provider-openai">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-5.2</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.75</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$14.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-openai">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4o</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">multimodal</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-openai">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4o mini</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.15</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.60</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-openai">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4 Turbo</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$30.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">legacy</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-anthropic">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Opus 4.5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$5.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$25.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-anthropic">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Sonnet 4.5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$15.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-anthropic">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Haiku 4.5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$5.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">fast</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-google">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 3 Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$12.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2M</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-google">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 3 Flash</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.50</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1M</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">fast</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-google">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 2.5 Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.25</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2M</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-google">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 2.5 Flash</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.30</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1M</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-deepseek">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek V3.2</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.28</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.42</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-deepseek">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek V2.5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.14</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.28</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-deepseek">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek R1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.55</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.19</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">reasoning</span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -86,7 +195,102 @@
                         </tr>
                     </thead>
                     <tbody id="codingPlansBody" class="bg-white divide-y divide-gray-200">
-                        <!-- Data will be inserted here -->
+                        <tr class="hover:bg-gray-50 provider-cursor">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Hobby</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Limited completions, slow premium requests</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Evaluation only</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cursor">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Unlimited basic completions, $20 credit for premium models</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~225 Sonnet requests/month</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cursor">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro+</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$60</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">More credits for heavy AI users</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3x Pro credits</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cursor">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ultra</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$200</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Top tier usage, priority access</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20x Pro credits</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cursor">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Business</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$40</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly/user</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Centralized billing, admin dashboard, SSO</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Per user</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-claude-code">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Free</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Basic chat access</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No Claude Code access</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-claude-code">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Terminal access, file creation, code execution</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40-80 hours/week</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-claude-code">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Max 5x</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$100</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">5x Pro usage, Opus access</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">200-400 hours/week</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-claude-code">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Max 20x</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$200</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">20x Pro usage, full Opus access</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">800-1600 hours/week</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cline">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Individual</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">free</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">VS Code/JetBrains extension, BYO API key</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Pay for your own API usage</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cline">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Teams</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly/user</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Centralized billing, team dashboard, RBAC</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">First 10 seats free</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 provider-cline">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Enterprise</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Custom</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">custom</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">SSO, SLA, dedicated support</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Custom pricing</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -99,6 +303,70 @@
         </footer>
     </div>
 
-    <script src="data.js"></script>
+    <script>
+        // Search functionality
+        document.getElementById('modelSearch').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('#aiModelsBody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+        });
+
+        document.getElementById('planSearch').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('#codingPlansBody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+        });
+
+        // Sort functionality
+        let currentSort = { field: null, direction: 'asc' };
+        
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const field = th.dataset.sort;
+                const tbody = th.closest('table').querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                if (currentSort.field === field) {
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort.field = field;
+                    currentSort.direction = 'asc';
+                }
+                
+                rows.sort((a, b) => {
+                    const aCells = a.querySelectorAll('td');
+                    const bCells = b.querySelectorAll('td');
+                    const thIndex = Array.from(th.parentNode.children).indexOf(th);
+                    
+                    let aVal = aCells[thIndex]?.textContent.trim() || '';
+                    let bVal = bCells[thIndex]?.textContent.trim() || '';
+                    
+                    // Try to parse as number
+                    const aNum = parseFloat(aVal.replace(/[$,]/g, ''));
+                    const bNum = parseFloat(bVal.replace(/[$,]/g, ''));
+                    
+                    if (!isNaN(aNum) && !isNaN(bNum)) {
+                        aVal = aNum;
+                        bVal = bNum;
+                    } else {
+                        aVal = aVal.toLowerCase();
+                        bVal = bVal.toLowerCase();
+                    }
+                    
+                    if (currentSort.direction === 'asc') {
+                        return aVal > bVal ? 1 : -1;
+                    } else {
+                        return aVal < bVal ? 1 : -1;
+                    }
+                });
+                
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    </script>
 </body>
 </html>
