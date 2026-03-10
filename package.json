@@ -1,0 +1,26 @@
+{
+  "name": "ai-model-compare",
+  "version": "1.0.0",
+  "description": "AI 大模型和 Coding Plan 价格对比网站",
+  "scripts": {
+    "update": "node scripts/update-data.js",
+    "serve": "npx serve src -l 3000",
+    "build": "echo 'Static site - no build required. Files are in src/ directory.'",
+    "deploy": "echo 'Deploy to GitHub Pages: push to gh-pages branch'"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "pricing",
+    "comparison",
+    "cursor",
+    "claude",
+    "gpt",
+    "gemini"
+  ],
+  "author": "wangzhongyang",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

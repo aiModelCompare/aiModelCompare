@@ -1,0 +1,36 @@
+name: Update Pricing Data
+
+on:
+  schedule:
+    # 每天北京时间 3:00 (UTC 19:00)
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Update pricing data
+        run: npm run update
+      
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/models.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update pricing data $(date +%Y-%m-%d)"
+            git push
+            echo "✅ Data updated and pushed"
+          else
+            echo "ℹ️ No changes to commit"
+          fi

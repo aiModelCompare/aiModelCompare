@@ -1,0 +1,215 @@
+{
+  "lastUpdated": "2026-03-10T12:20:16.964Z",
+  "aiModels": [
+    {
+      "provider": "OpenAI",
+      "model": "GPT-5.2",
+      "inputPrice": 1.75,
+      "outputPrice": 14,
+      "contextWindow": "128K",
+      "category": "flagship"
+    },
+    {
+      "provider": "OpenAI",
+      "model": "GPT-4o",
+      "inputPrice": 2.5,
+      "outputPrice": 10,
+      "contextWindow": "128K",
+      "category": "multimodal"
+    },
+    {
+      "provider": "OpenAI",
+      "model": "GPT-4o mini",
+      "inputPrice": 0.15,
+      "outputPrice": 0.6,
+      "contextWindow": "128K",
+      "category": "economy"
+    },
+    {
+      "provider": "OpenAI",
+      "model": "GPT-4 Turbo",
+      "inputPrice": 10,
+      "outputPrice": 30,
+      "contextWindow": "128K",
+      "category": "legacy"
+    },
+    {
+      "provider": "Anthropic",
+      "model": "Claude Opus 4.5",
+      "inputPrice": 5,
+      "outputPrice": 25,
+      "contextWindow": "200K",
+      "category": "flagship"
+    },
+    {
+      "provider": "Anthropic",
+      "model": "Claude Sonnet 4.5",
+      "inputPrice": 3,
+      "outputPrice": 15,
+      "contextWindow": "200K",
+      "category": "balanced"
+    },
+    {
+      "provider": "Anthropic",
+      "model": "Claude Haiku 4.5",
+      "inputPrice": 1,
+      "outputPrice": 5,
+      "contextWindow": "200K",
+      "category": "fast"
+    },
+    {
+      "provider": "Google",
+      "model": "Gemini 3 Pro",
+      "inputPrice": 2,
+      "outputPrice": 12,
+      "contextWindow": "2M",
+      "category": "flagship"
+    },
+    {
+      "provider": "Google",
+      "model": "Gemini 3 Flash",
+      "inputPrice": 0.5,
+      "outputPrice": 3,
+      "contextWindow": "1M",
+      "category": "fast"
+    },
+    {
+      "provider": "Google",
+      "model": "Gemini 2.5 Pro",
+      "inputPrice": 1.25,
+      "outputPrice": 10,
+      "contextWindow": "2M",
+      "category": "balanced"
+    },
+    {
+      "provider": "Google",
+      "model": "Gemini 2.5 Flash",
+      "inputPrice": 0.3,
+      "outputPrice": 2.5,
+      "contextWindow": "1M",
+      "category": "economy"
+    },
+    {
+      "provider": "DeepSeek",
+      "model": "DeepSeek V3.2",
+      "inputPrice": 0.28,
+      "outputPrice": 0.42,
+      "contextWindow": "128K",
+      "category": "economy"
+    },
+    {
+      "provider": "DeepSeek",
+      "model": "DeepSeek V2.5",
+      "inputPrice": 0.14,
+      "outputPrice": 0.28,
+      "contextWindow": "128K",
+      "category": "economy"
+    },
+    {
+      "provider": "DeepSeek",
+      "model": "DeepSeek R1",
+      "inputPrice": 0.55,
+      "outputPrice": 2.19,
+      "contextWindow": "128K",
+      "category": "reasoning"
+    }
+  ],
+  "codingPlans": [
+    {
+      "provider": "Cursor",
+      "plan": "Hobby",
+      "price": 0,
+      "billing": "monthly",
+      "features": "Limited completions, slow premium requests",
+      "limits": "Evaluation only"
+    },
+    {
+      "provider": "Cursor",
+      "plan": "Pro",
+      "price": 20,
+      "billing": "monthly",
+      "features": "Unlimited basic completions, $20 credit for premium models",
+      "limits": "~225 Sonnet requests/month"
+    },
+    {
+      "provider": "Cursor",
+      "plan": "Pro+",
+      "price": 60,
+      "billing": "monthly",
+      "features": "More credits for heavy AI users",
+      "limits": "3x Pro credits"
+    },
+    {
+      "provider": "Cursor",
+      "plan": "Ultra",
+      "price": 200,
+      "billing": "monthly",
+      "features": "Top tier usage, priority access",
+      "limits": "20x Pro credits"
+    },
+    {
+      "provider": "Cursor",
+      "plan": "Business",
+      "price": 40,
+      "billing": "monthly/user",
+      "features": "Centralized billing, admin dashboard, SSO",
+      "limits": "Per user"
+    },
+    {
+      "provider": "Claude Code",
+      "plan": "Free",
+      "price": 0,
+      "billing": "monthly",
+      "features": "Basic chat access",
+      "limits": "No Claude Code access"
+    },
+    {
+      "provider": "Claude Code",
+      "plan": "Pro",
+      "price": 20,
+      "billing": "monthly",
+      "features": "Terminal access, file creation, code execution",
+      "limits": "40-80 hours/week"
+    },
+    {
+      "provider": "Claude Code",
+      "plan": "Max 5x",
+      "price": 100,
+      "billing": "monthly",
+      "features": "5x Pro usage, Opus access",
+      "limits": "200-400 hours/week"
+    },
+    {
+      "provider": "Claude Code",
+      "plan": "Max 20x",
+      "price": 200,
+      "billing": "monthly",
+      "features": "20x Pro usage, full Opus access",
+      "limits": "800-1600 hours/week"
+    },
+    {
+      "provider": "Cline",
+      "plan": "Individual",
+      "price": 0,
+      "billing": "free",
+      "features": "VS Code/JetBrains extension, BYO API key",
+      "limits": "Pay for your own API usage"
+    },
+    {
+      "provider": "Cline",
+      "plan": "Teams",
+      "price": 20,
+      "billing": "monthly/user",
+      "features": "Centralized billing, team dashboard, RBAC",
+      "limits": "First 10 seats free"
+    },
+    {
+      "provider": "Cline",
+      "plan": "Enterprise",
+      "price": null,
+      "billing": "custom",
+      "features": "SSO, SLA, dedicated support",
+      "limits": "Custom pricing"
+    }
+  ]
+}
