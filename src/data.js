@@ -146,7 +146,7 @@
     // Load data from JSON
     async function loadData() {
         try {
-            const response = await fetch('../data/models.json');
+            const response = await fetch('./data/models.json');
             const data = await response.json();
 
             aiModelsData = data.aiModels;
