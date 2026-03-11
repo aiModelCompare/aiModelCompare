@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 大模型价格对比 - 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --pico-font-family: system-ui, -apple-system, sans-serif;
+        }
+        body { margin-bottom: 2rem; }
         .provider-openai { border-left: 4px solid #10a37f; }
         .provider-anthropic { border-left: 4px solid #d97706; }
         .provider-google { border-left: 4px solid #4285f4; }
@@ -20,328 +23,344 @@
         .provider-cursor { border-left: 4px solid #10b981; }
         .provider-claude-code { border-left: 4px solid #d97706; }
         .provider-cline { border-left: 4px solid #8b5cf6; }
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .container { padding-left: 16px; padding-right: 16px; }
-            h1 { font-size: 28px; }
-            h2 { font-size: 20px; }
-            .tab-button { padding: 10px 16px; font-size: 14px; }
-            .search-input { width: 100%; }
-            th, td { padding: 8px 12px; font-size: 13px; white-space: nowrap; }
-        }
+        
         /* Tab Styles */
-        .tab-buttons { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 0; flex-wrap: wrap; }
-        .tab-button { padding: 12px 24px; font-weight: 500; color: #6b7280; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .tab-button:hover { color: #2563eb; }
-        .tab-button.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .tab-buttons { display: flex; gap: 0.5rem; margin: 1.5rem 0; border-bottom: 2px solid var(--pico-muted-border-color); }
+        .tab-button { 
+            padding: 0.75rem 1.5rem; 
+            font-weight: 600; 
+            background: none; 
+            border: none; 
+            border-bottom: 3px solid transparent; 
+            margin-bottom: -2px; 
+            cursor: pointer; 
+            color: var(--pico-muted-color);
+        }
+        .tab-button:hover { color: var(--pico-primary); }
+        .tab-button.active { color: var(--pico-primary); border-bottom-color: var(--pico-primary); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        /* Search Input */
-        .search-input { width: 100%; max-width: 256px; }
-        @media (max-width: 640px) {
-            .search-input { max-width: 100%; }
+        
+        /* Table Styles */
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { margin-bottom: 0; }
+        th { cursor: pointer; white-space: nowrap; }
+        td { white-space: nowrap; }
+        
+        /* Badge Styles */
+        .badge { 
+            display: inline-block; 
+            padding: 0.25rem 0.5rem; 
+            border-radius: 9999px; 
+            font-size: 0.75rem; 
+            font-weight: 600;
+        }
+        .badge-flagship { background: #f3e8ff; color: #7e22ce; }
+        .badge-balanced { background: #dbeafe; color: #1d4ed8; }
+        .badge-fast { background: #dcfce7; color: #15803d; }
+        .badge-economy { background: #fef9c3; color: #a16207; }
+        .badge-legacy { background: #f3f4f6; color: #374151; }
+        .badge-multimodal { background: #fce7f3; color: #be185d; }
+        .badge-reasoning { background: #e0e7ff; color: #3730a3; }
+        .badge-free { background: #dcfce7; color: #15803d; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .tab-button { padding: 0.5rem 1rem; font-size: 0.875rem; }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.25rem; }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+<body>
+    <main class="container">
         <!-- Header -->
-        <header class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">🤖 AI 大模型价格对比</h1>
-            <p class="text-gray-600">实时对比主流 AI 模型的输入输出价格与 Coding Plan 收费</p>
-            <p class="text-sm text-gray-500 mt-2">最后更新：<span id="lastUpdate">2026-03-10 21:36</span></p>
+        <header>
+            <h1>🤖 AI 大模型价格对比</h1>
+            <p>实时对比主流 AI 模型的输入输出价格与 Coding Plan 收费</p>
+            <p><small>最后更新：<span id="lastUpdate">2026-03-10</span></small></p>
         </header>
 
         <!-- Tab Buttons -->
-        <div class="tab-buttons">
+        <nav class="tab-buttons">
             <button class="tab-button active" onclick="switchTab('models')">📊 大模型价格</button>
             <button class="tab-button" onclick="switchTab('plans')">💼 Coding Plan</button>
-        </div>
+        </nav>
 
         <!-- AI Models Tab -->
-        <section id="tab-models" class="tab-content active mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                <span class="mr-2">📊</span> AI 大模型价格对比
-                <span class="text-sm font-normal text-gray-500 ml-2">(每百万 Token，USD)</span>
-            </h2>
+        <section id="tab-models" class="tab-content active">
+            <h2>📊 AI 大模型价格对比 <small>（每百万 Token）</small></h2>
             
-            <div class="mb-4">
-                <input type="text" id="modelSearch" placeholder="搜索模型..." 
-                    class="search-input w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
+            <input type="text" id="modelSearch" placeholder="搜索模型..." aria-label="搜索模型">
 
-            <div class="table-container bg-white rounded-xl shadow-lg overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="table-wrapper">
+                <table role="grid">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="provider">厂商</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="model">模型</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="inputPrice">输入价格</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="outputPrice">输出价格</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="contextWindow">上下文</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
+                            <th data-sort="provider">厂商</th>
+                            <th data-sort="model">模型</th>
+                            <th data-sort="inputPrice">输入价格</th>
+                            <th data-sort="outputPrice">输出价格</th>
+                            <th data-sort="contextWindow">上下文</th>
+                            <th>类型</th>
                         </tr>
                     </thead>
-                    <tbody id="aiModelsBody" class="bg-white divide-y divide-gray-200">
-                        <tr class="hover:bg-gray-50 provider-openai">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-5.2</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.75</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$14.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                    <tbody id="aiModelsBody">
+                        <tr class="provider-openai">
+                            <td>OpenAI</td>
+                            <td><strong>GPT-5.2</strong></td>
+                            <td>$1.75</td>
+                            <td>$14.00</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-openai">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4o</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">multimodal</span></td>
+                        <tr class="provider-openai">
+                            <td>OpenAI</td>
+                            <td><strong>GPT-4o</strong></td>
+                            <td>$2.50</td>
+                            <td>$10.00</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-multimodal">multimodal</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-openai">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4o mini</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.15</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.60</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-openai">
+                            <td>OpenAI</td>
+                            <td><strong>GPT-4o mini</strong></td>
+                            <td>$0.15</td>
+                            <td>$0.60</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-openai">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">OpenAI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4 Turbo</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$30.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">legacy</span></td>
+                        <tr class="provider-openai">
+                            <td>OpenAI</td>
+                            <td><strong>GPT-4 Turbo</strong></td>
+                            <td>$10.00</td>
+                            <td>$30.00</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-legacy">legacy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-anthropic">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Opus 4.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$5.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$25.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-anthropic">
+                            <td>Anthropic</td>
+                            <td><strong>Claude Opus 4.5</strong></td>
+                            <td>$5.00</td>
+                            <td>$25.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-anthropic">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Sonnet 4.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$15.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-anthropic">
+                            <td>Anthropic</td>
+                            <td><strong>Claude Sonnet 4.5</strong></td>
+                            <td>$3.00</td>
+                            <td>$15.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-anthropic">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Anthropic</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Claude Haiku 4.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$5.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">fast</span></td>
+                        <tr class="provider-anthropic">
+                            <td>Anthropic</td>
+                            <td><strong>Claude Haiku 4.5</strong></td>
+                            <td>$1.00</td>
+                            <td>$5.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-fast">fast</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-google">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 3 Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$12.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2M</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-google">
+                            <td>Google</td>
+                            <td><strong>Gemini 3 Pro</strong></td>
+                            <td>$2.00</td>
+                            <td>$12.00</td>
+                            <td>2M</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-google">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 3 Flash</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1M</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">fast</span></td>
+                        <tr class="provider-google">
+                            <td>Google</td>
+                            <td><strong>Gemini 3 Flash</strong></td>
+                            <td>$0.50</td>
+                            <td>$3.00</td>
+                            <td>1M</td>
+                            <td><span class="badge badge-fast">fast</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-google">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 2.5 Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.25</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2M</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-google">
+                            <td>Google</td>
+                            <td><strong>Gemini 2.5 Pro</strong></td>
+                            <td>$1.25</td>
+                            <td>$10.00</td>
+                            <td>2M</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-google">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Google</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gemini 2.5 Flash</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.30</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1M</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-google">
+                            <td>Google</td>
+                            <td><strong>Gemini 2.5 Flash</strong></td>
+                            <td>$0.30</td>
+                            <td>$2.50</td>
+                            <td>1M</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-deepseek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek V3.2</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.28</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.42</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-deepseek">
+                            <td>DeepSeek</td>
+                            <td><strong>DeepSeek V3.2</strong></td>
+                            <td>$0.28</td>
+                            <td>$0.42</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-deepseek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek V2.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.14</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.28</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-deepseek">
+                            <td>DeepSeek</td>
+                            <td><strong>DeepSeek V2.5</strong></td>
+                            <td>$0.14</td>
+                            <td>$0.28</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-deepseek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">DeepSeek</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DeepSeek R1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.55</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.19</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">reasoning</span></td>
+                        <tr class="provider-deepseek">
+                            <td>DeepSeek</td>
+                            <td><strong>DeepSeek R1</strong></td>
+                            <td>$0.55</td>
+                            <td>$2.19</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-reasoning">reasoning</span></td>
                         </tr>
-                        <!-- 中国大模型 -->
-                        <tr class="hover:bg-gray-50 provider-alibaba">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里云</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">通义千问 Qwen-Max</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.60</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$6.40</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-alibaba">
+                            <td>阿里云</td>
+                            <td><strong>通义千问 Qwen-Max</strong></td>
+                            <td>$1.60</td>
+                            <td>$6.40</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-alibaba">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里云</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">通义千问 Qwen-Plus</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.40</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1.20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-alibaba">
+                            <td>阿里云</td>
+                            <td><strong>通义千问 Qwen-Plus</strong></td>
+                            <td>$0.40</td>
+                            <td>$1.20</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-alibaba">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里云</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">通义千问 Qwen-Turbo</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.05</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.15</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-alibaba">
+                            <td>阿里云</td>
+                            <td><strong>通义千问 Qwen-Turbo</strong></td>
+                            <td>$0.05</td>
+                            <td>$0.15</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-baidu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">文心一言 4.5 Turbo</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥0.80</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥3.20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-baidu">
+                            <td>百度</td>
+                            <td><strong>文心一言 4.5 Turbo</strong></td>
+                            <td>¥0.80</td>
+                            <td>¥3.20</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-baidu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">文心一言 4.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥4.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥16.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-baidu">
+                            <td>百度</td>
+                            <td><strong>文心一言 4.5</strong></td>
+                            <td>¥4.00</td>
+                            <td>¥16.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-baidu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">文心一言 X1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥2.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥8.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">reasoning</span></td>
+                        <tr class="provider-baidu">
+                            <td>百度</td>
+                            <td><strong>文心一言 X1</strong></td>
+                            <td>¥2.00</td>
+                            <td>¥8.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-reasoning">reasoning</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 Lite</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">免费</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">免费</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">free</span></td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 Lite</strong></td>
+                            <td>免费</td>
+                            <td>免费</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-free">free</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 Pro/Max</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥21.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥21.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 Pro/Max</strong></td>
+                            <td>¥21.00</td>
+                            <td>¥21.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-tencent">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">腾讯</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">混元 Lite</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">免费</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">免费</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">free</span></td>
+                        <tr class="provider-tencent">
+                            <td>腾讯</td>
+                            <td><strong>混元 Lite</strong></td>
+                            <td>免费</td>
+                            <td>免费</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-free">free</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-tencent">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">腾讯</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">混元 T1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥1.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥4.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-tencent">
+                            <td>腾讯</td>
+                            <td><strong>混元 T1</strong></td>
+                            <td>¥1.00</td>
+                            <td>¥4.00</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-tencent">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">腾讯</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">混元 Standard</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥4.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥5.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-tencent">
+                            <td>腾讯</td>
+                            <td><strong>混元 Standard</strong></td>
+                            <td>¥4.50</td>
+                            <td>¥5.00</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <!-- 智谱 AI -->
-                        <tr class="hover:bg-gray-50 provider-zhipu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">智谱 AI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GLM-5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥4.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥18.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">200K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-zhipu">
+                            <td>智谱 AI</td>
+                            <td><strong>GLM-5</strong></td>
+                            <td>¥4.00</td>
+                            <td>¥18.00</td>
+                            <td>200K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-zhipu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">智谱 AI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GLM-4.5-Air</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥0.80</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥3.20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-zhipu">
+                            <td>智谱 AI</td>
+                            <td><strong>GLM-4.5-Air</strong></td>
+                            <td>¥0.80</td>
+                            <td>¥3.20</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-zhipu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">智谱 AI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GLM-4-Air</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥0.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥2.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">economy</span></td>
+                        <tr class="provider-zhipu">
+                            <td>智谱 AI</td>
+                            <td><strong>GLM-4-Air</strong></td>
+                            <td>¥0.50</td>
+                            <td>¥2.00</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-zhipu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">智谱 AI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GLM-4-FlashX</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥0.10</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">¥0.40</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">economy</span></td>
+                        <tr class="provider-zhipu">
+                            <td>智谱 AI</td>
+                            <td><strong>GLM-4-FlashX</strong></td>
+                            <td>¥0.10</td>
+                            <td>¥0.40</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-economy">economy</span></td>
                         </tr>
-                        <!-- Kimi 月之暗面 -->
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">月之暗面</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Kimi K2.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.60</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">256K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">flagship</span></td>
+                        <tr class="provider-kimi">
+                            <td>月之暗面</td>
+                            <td><strong>Kimi K2.5</strong></td>
+                            <td>$0.60</td>
+                            <td>$2.50</td>
+                            <td>256K</td>
+                            <td><span class="badge badge-flagship">flagship</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">月之暗面</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Kimi K2</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.55</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">131K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">balanced</span></td>
+                        <tr class="provider-kimi">
+                            <td>月之暗面</td>
+                            <td><strong>Kimi K2</strong></td>
+                            <td>$0.55</td>
+                            <td>$2.20</td>
+                            <td>131K</td>
+                            <td><span class="badge badge-balanced">balanced</span></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">月之暗面</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Kimi K2 Thinking</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.60</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">128K</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">reasoning</span></td>
+                        <tr class="provider-kimi">
+                            <td>月之暗面</td>
+                            <td><strong>Kimi K2 Thinking</strong></td>
+                            <td>$0.60</td>
+                            <td>$2.00</td>
+                            <td>128K</td>
+                            <td><span class="badge badge-reasoning">reasoning</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -350,230 +369,222 @@
 
         <!-- Coding Plans Tab -->
         <section id="tab-plans" class="tab-content">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                <span class="mr-2">💼</span> Coding Plan 价格对比
-                <span class="text-sm font-normal text-gray-500 ml-2">(月费，USD)</span>
-            </h2>
+            <h2>💼 Coding Plan 价格对比 <small>（月费）</small></h2>
+            
+            <input type="text" id="planSearch" placeholder="搜索套餐..." aria-label="搜索套餐">
 
-            <div class="mb-4">
-                <input type="text" id="planSearch" placeholder="搜索套餐..." 
-                    class="search-input w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-
-            <div class="table-container bg-white rounded-xl shadow-lg overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="table-wrapper">
+                <table role="grid">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="provider">厂商</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="plan">套餐</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="price">价格</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">计费方式</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">特色功能</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">限制</th>
+                            <th data-sort="provider">厂商</th>
+                            <th data-sort="plan">套餐</th>
+                            <th data-sort="price">价格</th>
+                            <th>计费方式</th>
+                            <th>特色功能</th>
+                            <th>限制</th>
                         </tr>
                     </thead>
-                    <tbody id="codingPlansBody" class="bg-white divide-y divide-gray-200">
-                        <tr class="hover:bg-gray-50 provider-cursor">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Hobby</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Limited completions, slow premium requests</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Evaluation only</td>
+                    <tbody id="codingPlansBody">
+                        <tr class="provider-cursor">
+                            <td>Cursor</td>
+                            <td><strong>Hobby</strong></td>
+                            <td>Free</td>
+                            <td>monthly</td>
+                            <td>Limited completions</td>
+                            <td>Evaluation only</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cursor">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Unlimited basic completions, $20 credit for premium models</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">~225 Sonnet requests/month</td>
+                        <tr class="provider-cursor">
+                            <td>Cursor</td>
+                            <td><strong>Pro</strong></td>
+                            <td>$20</td>
+                            <td>monthly</td>
+                            <td>Unlimited basic, $20 credit</td>
+                            <td>~225 Sonnet requests</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cursor">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro+</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$60</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">More credits for heavy AI users</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3x Pro credits</td>
+                        <tr class="provider-cursor">
+                            <td>Cursor</td>
+                            <td><strong>Pro+</strong></td>
+                            <td>$60</td>
+                            <td>monthly</td>
+                            <td>More credits</td>
+                            <td>3x Pro credits</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cursor">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ultra</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$200</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Top tier usage, priority access</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20x Pro credits</td>
+                        <tr class="provider-cursor">
+                            <td>Cursor</td>
+                            <td><strong>Ultra</strong></td>
+                            <td>$200</td>
+                            <td>monthly</td>
+                            <td>Top tier, priority</td>
+                            <td>20x Pro credits</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cursor">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cursor</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Business</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$40</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly/user</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Centralized billing, admin dashboard, SSO</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Per user</td>
+                        <tr class="provider-cursor">
+                            <td>Cursor</td>
+                            <td><strong>Business</strong></td>
+                            <td>$40</td>
+                            <td>monthly/user</td>
+                            <td>Centralized billing, SSO</td>
+                            <td>Per user</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-claude-code">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Free</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Basic chat access</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No Claude Code access</td>
+                        <tr class="provider-claude-code">
+                            <td>Claude Code</td>
+                            <td><strong>Free</strong></td>
+                            <td>Free</td>
+                            <td>monthly</td>
+                            <td>Basic chat</td>
+                            <td>No Claude Code</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-claude-code">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Terminal access, file creation, code execution</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40-80 hours/week</td>
+                        <tr class="provider-claude-code">
+                            <td>Claude Code</td>
+                            <td><strong>Pro</strong></td>
+                            <td>$20</td>
+                            <td>monthly</td>
+                            <td>Terminal, file creation</td>
+                            <td>40-80 hours/week</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-claude-code">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Max 5x</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$100</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">5x Pro usage, Opus access</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">200-400 hours/week</td>
+                        <tr class="provider-claude-code">
+                            <td>Claude Code</td>
+                            <td><strong>Max 5x</strong></td>
+                            <td>$100</td>
+                            <td>monthly</td>
+                            <td>5x Pro, Opus access</td>
+                            <td>200-400 hours/week</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-claude-code">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Claude Code</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Max 20x</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$200</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">20x Pro usage, full Opus access</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">800-1600 hours/week</td>
+                        <tr class="provider-claude-code">
+                            <td>Claude Code</td>
+                            <td><strong>Max 20x</strong></td>
+                            <td>$200</td>
+                            <td>monthly</td>
+                            <td>20x Pro, full Opus</td>
+                            <td>800-1600 hours/week</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cline">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Individual</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Free</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">free</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">VS Code/JetBrains extension, BYO API key</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Pay for your own API usage</td>
+                        <tr class="provider-cline">
+                            <td>Cline</td>
+                            <td><strong>Individual</strong></td>
+                            <td>Free</td>
+                            <td>free</td>
+                            <td>VS Code extension, BYO key</td>
+                            <td>Pay for API usage</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cline">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Teams</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">$20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly/user</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Centralized billing, team dashboard, RBAC</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">First 10 seats free</td>
+                        <tr class="provider-cline">
+                            <td>Cline</td>
+                            <td><strong>Teams</strong></td>
+                            <td>$20</td>
+                            <td>monthly/user</td>
+                            <td>Team dashboard, RBAC</td>
+                            <td>First 10 seats free</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-cline">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cline</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Enterprise</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">Custom</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">custom</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">SSO, SLA, dedicated support</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Custom pricing</td>
+                        <tr class="provider-cline">
+                            <td>Cline</td>
+                            <td><strong>Enterprise</strong></td>
+                            <td>Custom</td>
+                            <td>custom</td>
+                            <td>SSO, SLA, support</td>
+                            <td>Custom pricing</td>
                         </tr>
-                        <!-- 国内厂商 Coding Plan -->
-                        <tr class="hover:bg-gray-50 provider-alibaba">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里云</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">通义千问 Coding Plan Lite</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥99</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Qwen3.5-plus, Qwen3-max 等模型，每月 1.8 万次请求</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">次月续费 5 折</td>
+                        <tr class="provider-alibaba">
+                            <td>阿里云</td>
+                            <td><strong>通义千问 Coding Plan Lite</strong></td>
+                            <td>¥99</td>
+                            <td>monthly</td>
+                            <td>1.8 万次请求</td>
+                            <td>次月 5 折</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-alibaba">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里云</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">通义千问 Coding Plan Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥299</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">更高额度，优先支持新特性</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">年付优惠</td>
+                        <tr class="provider-alibaba">
+                            <td>阿里云</td>
+                            <td><strong>通义千问 Coding Plan Pro</strong></td>
+                            <td>¥299</td>
+                            <td>monthly</td>
+                            <td>更高额度</td>
+                            <td>年付优惠</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-baidu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">千帆 Coding Plan Lite</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥7.9</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">首月</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">18,000 次/月，GLM-5/Kimi-K2.5/MiniMax-M2.5 等</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">次月¥20，第三月¥40</td>
+                        <tr class="provider-baidu">
+                            <td>百度</td>
+                            <td><strong>千帆 Coding Plan Lite</strong></td>
+                            <td>¥7.9</td>
+                            <td>首月</td>
+                            <td>18,000 次/月</td>
+                            <td>次月¥20, 第三月¥40</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-baidu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">千帆 Coding Plan Pro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥39.9</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">首月</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">90,000 次/月，GLM-5/Kimi-K2.5/MiniMax-M2.5 等</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">次月¥100，第三月¥200</td>
+                        <tr class="provider-baidu">
+                            <td>百度</td>
+                            <td><strong>千帆 Coding Plan Pro</strong></td>
+                            <td>¥39.9</td>
+                            <td>首月</td>
+                            <td>90,000 次/月</td>
+                            <td>次月¥100, 第三月¥200</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Kimi</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">会员 Andante</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥49</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">入门版，深度研究次数有限</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">个人用户</td>
+                        <tr class="provider-kimi">
+                            <td>Kimi</td>
+                            <td><strong>会员 Andante</strong></td>
+                            <td>¥49</td>
+                            <td>monthly</td>
+                            <td>入门版</td>
+                            <td>个人用户</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Kimi</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">会员 Moderato</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥99</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">基础版，更多使用次数</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">个人用户</td>
+                        <tr class="provider-kimi">
+                            <td>Kimi</td>
+                            <td><strong>会员 Moderato</strong></td>
+                            <td>¥99</td>
+                            <td>monthly</td>
+                            <td>基础版</td>
+                            <td>个人用户</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-kimi">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Kimi</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">会员 Allegro</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥199</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">进阶版，最高权益</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">个人用户</td>
+                        <tr class="provider-kimi">
+                            <td>Kimi</td>
+                            <td><strong>会员 Allegro</strong></td>
+                            <td>¥199</td>
+                            <td>monthly</td>
+                            <td>进阶版</td>
+                            <td>个人用户</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-zhipu">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">智谱 AI</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GLM Coding Plan</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥199</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">monthly</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">GLM-5 等模型，按季/年订阅优惠</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">开发者</td>
+                        <tr class="provider-zhipu">
+                            <td>智谱 AI</td>
+                            <td><strong>GLM Coding Plan</strong></td>
+                            <td>¥199</td>
+                            <td>monthly</td>
+                            <td>GLM-5 等模型</td>
+                            <td>季/年优惠</td>
                         </tr>
-                        <!-- 其他国内厂商（按 Token 计费，无订阅套餐） -->
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 API</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">按量</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">pay-as-you-go</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Lite 免费，Pro/Max ¥21/百万</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">无订阅，按 Token 计费</td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 API</strong></td>
+                            <td>按量</td>
+                            <td>pay-as-you-go</td>
+                            <td>Lite 免费</td>
+                            <td>按 Token 计费</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 Coding Plan 入门版</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥3.9</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">首月</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">2000 万 tokens/日，DeepSeek-V3.2/GLM-4.7-Flash</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">叠加¥19/月</td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 Coding Plan 入门版</strong></td>
+                            <td>¥3.9</td>
+                            <td>首月</td>
+                            <td>2000 万 tokens/日</td>
+                            <td>叠加¥19/月</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 Coding Plan 专业版</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥7.9</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">首月</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">1000 万 tokens/日，DeepSeek/GLM-5/Kimi/MiniMax</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">叠加¥39/月</td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 Coding Plan 专业版</strong></td>
+                            <td>¥7.9</td>
+                            <td>首月</td>
+                            <td>1000 万 tokens/日</td>
+                            <td>叠加¥39/月</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-iflytek">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">讯飞</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">讯飞星火 Coding Plan 高效版</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">¥39.9</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">首月</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">5000 万 tokens/日，全部旗舰模型</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">叠加¥199/月</td>
+                        <tr class="provider-iflytek">
+                            <td>讯飞</td>
+                            <td><strong>讯飞星火 Coding Plan 高效版</strong></td>
+                            <td>¥39.9</td>
+                            <td>首月</td>
+                            <td>5000 万 tokens/日</td>
+                            <td>叠加¥199/月</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 provider-tencent">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">腾讯</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">腾讯混元 API</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">按量</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">pay-as-you-go</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Lite 免费，T1 ¥1/¥4，Standard ¥4.5/¥5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">无订阅，按 Token 计费</td>
+                        <tr class="provider-tencent">
+                            <td>腾讯</td>
+                            <td><strong>腾讯混元 API</strong></td>
+                            <td>按量</td>
+                            <td>pay-as-you-go</td>
+                            <td>Lite 免费</td>
+                            <td>按 Token 计费</td>
                         </tr>
                     </tbody>
                 </table>
@@ -581,26 +592,19 @@
         </section>
 
         <!-- Footer -->
-        <footer class="mt-12 text-center text-gray-500 text-sm">
-            <p>数据来源：各厂商官方定价页面 | 价格可能随时变动，请以官网为准</p>
-            <p class="mt-2">每日北京时间 3:00 自动更新</p>
+        <hr>
+        <footer>
+            <p><small>数据来源：各厂商官方定价页面 | 价格可能随时变动，请以官网为准</small></p>
+            <p><small>每日北京时间 3:00 自动更新</small></p>
         </footer>
-    </div>
+    </main>
 
     <script>
         // Tab switching
         function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            // Deactivate all buttons
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Show selected tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
-            // Activate corresponding button
             event.target.classList.add('active');
         }
 
@@ -608,46 +612,31 @@
         document.getElementById('modelSearch').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
             document.querySelectorAll('#aiModelsBody tr').forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(term) ? '' : 'none';
+                row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
             });
         });
 
         document.getElementById('planSearch').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
             document.querySelectorAll('#codingPlansBody tr').forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(term) ? '' : 'none';
+                row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
             });
         });
 
         // Sort functionality
-        let currentSort = { field: null, direction: 'asc' };
-        
         document.querySelectorAll('th[data-sort]').forEach(th => {
             th.addEventListener('click', () => {
                 const field = th.dataset.sort;
                 const tbody = th.closest('table').querySelector('tbody');
                 const rows = Array.from(tbody.querySelectorAll('tr'));
                 
-                if (currentSort.field === field) {
-                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-                } else {
-                    currentSort.field = field;
-                    currentSort.direction = 'asc';
-                }
-                
                 rows.sort((a, b) => {
-                    const aCells = a.querySelectorAll('td');
-                    const bCells = b.querySelectorAll('td');
-                    const thIndex = Array.from(th.parentNode.children).indexOf(th);
+                    const cells = th.cellIndex;
+                    let aVal = a.cells[cells]?.textContent.trim() || '';
+                    let bVal = b.cells[cells]?.textContent.trim() || '';
                     
-                    let aVal = aCells[thIndex]?.textContent.trim() || '';
-                    let bVal = bCells[thIndex]?.textContent.trim() || '';
-                    
-                    // Try to parse as number
-                    const aNum = parseFloat(aVal.replace(/[$,]/g, ''));
-                    const bNum = parseFloat(bVal.replace(/[$,]/g, ''));
+                    const aNum = parseFloat(aVal.replace(/[$,¥]/g, ''));
+                    const bNum = parseFloat(bVal.replace(/[$,¥]/g, ''));
                     
                     if (!isNaN(aNum) && !isNaN(bNum)) {
                         aVal = aNum;
@@ -657,11 +646,7 @@
                         bVal = bVal.toLowerCase();
                     }
                     
-                    if (currentSort.direction === 'asc') {
-                        return aVal > bVal ? 1 : -1;
-                    } else {
-                        return aVal < bVal ? 1 : -1;
-                    }
+                    return aVal > bVal ? 1 : -1;
                 });
                 
                 rows.forEach(row => tbody.appendChild(row));
